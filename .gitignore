@@ -1,3 +1,6 @@
+### Dataset
+dataset/
+
 # Visual Studio Code
 .vscode/*
 !.vscode/settings.json
