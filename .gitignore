@@ -1,6 +1,11 @@
 ### Dataset
 dataset/
 
+# macOS + Windows
+.DS_Store
+._*
+Thumbs.db
+
 # Visual Studio Code
 .vscode/*
 !.vscode/settings.json
