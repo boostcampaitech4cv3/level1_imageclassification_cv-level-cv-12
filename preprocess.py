@@ -4,6 +4,9 @@ import cv2
 import numpy as np
 import pandas as pd
 from tqdm import tqdm
+import random
+
+from align_faces import warp_and_crop_face, get_reference_facial_points
 
 import torch
 import torchvision.transforms as T
@@ -38,7 +41,7 @@ except OSError as error:
 
 ### Configure
 cfg = cfg_re50
-confidence_threshold = 0.016
+confidence_threshold = 0.015
 top_k = 5000
 nms_threshold = 0.4
 keep_top_k = 1
@@ -106,6 +109,15 @@ def load_model(model, pretrained_path, load_to_cpu):
     model.load_state_dict(pretrained_dict, strict=False)
     return model
 
+# Fix SEED
+random_seed = 12
+torch.manual_seed(random_seed)
+torch.cuda.manual_seed(random_seed)
+torch.cuda.manual_seed_all(random_seed) # if use multi-GPU
+torch.backends.cudnn.deterministic = True
+torch.backends.cudnn.benchmark = False
+np.random.seed(random_seed)
+random.seed(random_seed)
 
 ### net and model
 detector = RetinaFace(cfg=cfg, phase='test')
@@ -118,6 +130,11 @@ transform = T.Compose([
             T.ToTensor()
             #T.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
         ])
+
+default_square = True
+inner_padding_factor = 0.05
+outer_padding = (0, 0)
+output_size = (224, 224)
 
 with torch.no_grad():
     resize = 1
@@ -233,15 +250,15 @@ with torch.no_grad():
             # save image
             cv2.imwrite(f"{cropped_img_path}{det_idx}.jpg", img_output)
 
-            crop_with = b[BBoxX2] - b[BBoxX1]
-            crop_height = b[BBoxY2] - b[BBoxY1]
-            center_pos = (int(crop_with / 2) + b[BBoxX1], int(crop_height / 2) + b[BBoxY1])
-            crop_offset = max(int(crop_with / 2), int(crop_height / 2))
-            
-            cropped_img = img_raw[max(0, center_pos[1] - crop_offset):min(img_height, center_pos[1] + crop_offset),
-                                    max(0, center_pos[0] - crop_offset):min(img_height, center_pos[0] + crop_offset)]
-            cropped_img = cv2.resize(cropped_img, (256, 256), interpolation=cv2.INTER_CUBIC)
-            cv2.imwrite(f"{cropped_img_path}{det_idx}-cropped.jpg", cropped_img)
+            facial5points = [[b[LE_X], b[LE_Y]],
+                            [b[RE_X], b[RE_Y]],
+                            [b[ N_X], b[ N_Y]],
+                            [b[LM_X], b[LM_Y]],
+                            [b[RM_X], b[RM_Y]]
+                            ]
+            reference_5pts = get_reference_facial_points(output_size, inner_padding_factor, outer_padding, default_square)
+            align_crop_img = warp_and_crop_face(img_raw, facial5points, reference_pts=reference_5pts, crop_size=output_size)
+            cv2.imwrite(f"{cropped_img_path}{det_idx}-cropped.jpg", align_crop_img)
             
             det_idx += 1
 
@@ -269,109 +286,3 @@ with torch.no_grad():
                                                      b[LE_X], b[LE_Y], b[RE_X], b[RE_Y], b[N_X], b[N_Y], b[LM_X], b[LM_Y], b[RM_X], b[RM_Y] 
                                                     ]
     new_train_csv.to_csv(new_train_csv_path)
-
-    # Convert and Detect -- Eval (Test only)
-    eval_csv = pd.read_csv(eval_csv_path)
-    det_idx = 0
-    for i in tqdm(range(len(eval_csv))):
-        filepath = eval_dir_path + f"images/{eval_csv.iloc[i]['ImageID']}"
-        file_name, file_extension = os.path.splitext(filepath)
-        if os.path.isfile(file_name + '.npy') == False:
-            img = cv2.cvtColor(cv2.imread(filepath, cv2.IMREAD_COLOR), cv2.COLOR_BGR2RGB)
-            np.save(file_name + '.npy', img)
-        
-        img_raw = np.load(file_name + '.npy')
-        img_raw = cv2.cvtColor(img_raw, cv2.COLOR_BGR2RGB)
-
-        img = np.float32(img_raw)
-        img -= (104, 117, 123)
-    
-        img_height, img_width, _ = img.shape
-        scale = torch.Tensor([img.shape[1], img.shape[0], img.shape[1], img.shape[0]])
-        img = transform(img).unsqueeze(0)
-        img = img.to(device)
-        scale = scale.to(device)
-
-        loc, conf, landms = detector(img)  # Forward
-        
-        priorbox = PriorBox(cfg, image_size=(img_height, img_width))
-        priors = priorbox.forward()
-        priors = priors.to(device)
-        prior_data = priors.data
-        boxes = decode(loc.data.squeeze(0), prior_data, cfg['variance'])
-        boxes = boxes * scale / resize
-        boxes = boxes.cpu().numpy()
-        scores = conf.squeeze(0).data.cpu().numpy()[:, 1]
-        landms = decode_landm(landms.data.squeeze(0), prior_data, cfg['variance'])
-        scale1 = torch.Tensor([img.shape[3], img.shape[2], img.shape[3], img.shape[2],
-                            img.shape[3], img.shape[2], img.shape[3], img.shape[2],
-                            img.shape[3], img.shape[2]])
-        scale1 = scale1.to(device)
-        landms = landms * scale1 / resize
-        landms = landms.cpu().numpy()
-
-        # ignore low scores
-        inds = np.where(scores > confidence_threshold)[0]
-        boxes = boxes[inds]
-        landms = landms[inds]
-        scores = scores[inds]
-
-        # keep top-K before NMS
-        order = scores.argsort()[::-1][:top_k]
-        boxes = boxes[order]
-        landms = landms[order]
-        scores = scores[order]
-
-        # do NMS
-        dets = np.hstack((boxes, scores[:, np.newaxis])).astype(np.float32, copy=False)
-        keep = py_cpu_nms(dets, nms_threshold)
-        # keep = nms(dets, nms_threshold,force_cpu=False)
-        dets = dets[keep, :]
-        landms = landms[keep]
-
-        # keep top-K faster NMS
-        dets = dets[:keep_top_k, :]
-        landms = landms[:keep_top_k, :]
-
-        dets = np.concatenate((dets, landms), axis=1)
-
-        # Not Found Face
-        if len(dets) != 1:
-            print(filepath)
-
-        """
-        # show image
-        for b in dets:
-            if b[SCORE] < vis_thres:
-                continue
-            text = "{:.4f}".format(b[SCORE])
-            b = list(map(int, b))
-
-            img_output = img_raw.copy()
-            cv2.rectangle(img_output, (b[BBoxX1], b[BBoxY1]), (b[BBoxX2], b[BBoxY2]), (0, 0, 255), 2)
-            cx = b[BBoxX1]
-            cy = b[BBoxY1] + 12
-            cv2.putText(img_output, text, (cx, cy), cv2.FONT_HERSHEY_DUPLEX, 0.5, (255, 255, 255))
-
-            # landms
-            cv2.circle(img_output, (b[LE_X], b[LE_Y]), 1, (0, 0, 255), 4)
-            cv2.circle(img_output, (b[RE_X], b[RE_Y]), 1, (0, 255, 255), 4)
-            cv2.circle(img_output, (b[ N_X], b[ N_Y]), 1, (255, 0, 255), 4)
-            cv2.circle(img_output, (b[LM_X], b[LM_Y]), 1, (0, 255, 0), 4)
-            cv2.circle(img_output, (b[RM_X], b[RM_Y]), 1, (255, 0, 0), 4)
-
-            # save image
-            cv2.imwrite(f"{cropped_eval_img_path}{det_idx}.jpg", img_output)
-
-            crop_with = b[BBoxX2] - b[BBoxX1]
-            crop_height = b[BBoxY2] - b[BBoxY1]
-            center_pos = (int(crop_with / 2) + b[BBoxX1], int(crop_height / 2) + b[BBoxY1])
-            crop_offset = max(int(crop_with / 2), int(crop_height / 2))
-            
-            cropped_img = img_raw[max(0, center_pos[1] - crop_offset):min(img_height, center_pos[1] + crop_offset),
-                                    max(0, center_pos[0] - crop_offset):min(img_height, center_pos[0] + crop_offset)]
-            cropped_img = cv2.resize(cropped_img, (256, 256), interpolation=cv2.INTER_CUBIC)
-            cv2.imwrite(f"{cropped_eval_img_path}{det_idx}-cropped.jpg", cropped_img)
-            
-            det_idx += 1
-        """
