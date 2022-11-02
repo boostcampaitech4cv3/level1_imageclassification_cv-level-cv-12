@@ -129,20 +129,21 @@ transform = T.Compose([
         ])
 
 
-basemodel_resnet34 = torch.load('../checkpoint/resnet34_with_detect/checkpoint_ep_30.pth')
-basemodel_resnet34.eval()
-basemodel_resnet34 = basemodel_resnet34.to(device)
+model = torch.load('../checkpoint/resnet50_detection/checkpoint_ep_25.pth')
+model.eval()
+model = model.to(device)
 
 base_transform = transforms.Compose([
                                     ToTensor(),
-                                    #Normalize(mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225)),
+                                    Normalize(mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225)),
                             ])
 
 
 default_square = True
-inner_padding_factor = 0.05
+inner_padding_factor = 0.25
 outer_padding = (0, 0)
-output_size = (224, 224)
+# output_size = (224, 224)
+output_size = (384, 384)
 
 all_predictions = []
 
@@ -267,7 +268,7 @@ with torch.no_grad():
         align_crop_img = base_transform(align_crop_img).unsqueeze(0)
         align_crop_img = align_crop_img.to(device)
 
-        pred = basemodel_resnet34(align_crop_img)
+        pred = model(align_crop_img)
         pred = pred.argmax(dim=-1)
         all_predictions.extend(pred.cpu().numpy())
 
