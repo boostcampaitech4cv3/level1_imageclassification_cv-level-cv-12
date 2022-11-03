@@ -23,6 +23,7 @@ from utils.box_utils import decode, decode_landm
 train_dir_path = '../input/data/train/'
 train_csv_path = train_dir_path + 'train.csv'
 new_train_csv_path = train_dir_path + 'expanded_train.csv'
+new_image_path = '/opt/ml/input/data/crop_image/'
 
 cropped_img_path = '../input/data/crop/'
 try: 
@@ -132,9 +133,10 @@ transform = T.Compose([
         ])
 
 default_square = True
-inner_padding_factor = 0.05
+inner_padding_factor = 0.25
 outer_padding = (0, 0)
-output_size = (224, 224)
+# output_size = (224, 224)
+output_size = (384, 384)
 
 with torch.no_grad():
     resize = 1
@@ -142,6 +144,7 @@ with torch.no_grad():
     # Convert and Detect -- Train
     train_csv = pd.read_csv(train_csv_path)
     new_train_csv = pd.DataFrame(columns = ['PersonID',   # 000001 ~ 
+                                            'Path',
                                             'Filename',   # Full path
                                             'Class',      # 0 ~ 17
                                             'Mask',       # 0 ~ 2 / M, m, _
@@ -151,7 +154,6 @@ with torch.no_grad():
                                             'Has_Face',   # True / False
                                             'BBoxX1', 'BBoxY1', 'BBoxX2', 'BBoxY2',  # Position
                                             'Score',      # Score
-                                            'LE_X', 'LE_Y', 'RE_X', 'RE_Y', 'N_X', 'N_Y', 'LM_X', 'LM_Y', 'RM_X', 'RM_Y'  # Position
                                             ])
 
     det_idx = 0
@@ -160,7 +162,8 @@ with torch.no_grad():
         files = list(get_files(filepath))
         for filepath in files:
             file_name, file_extension = os.path.splitext(filepath)
-            
+            if file_name.split("/")[-1][0] == ".":
+                continue
             if file_extension in ['.jpg', '.jpeg', '.png']:
                 if os.path.isfile(file_name + '.npy') == False:
                     img = cv2.cvtColor(cv2.imread(filepath, cv2.IMREAD_COLOR), cv2.COLOR_BGR2RGB)
@@ -234,31 +237,31 @@ with torch.no_grad():
             b = list(map(int, b))
 
             # show image
-            img_output = img_raw.copy()
-            cv2.rectangle(img_output, (b[BBoxX1], b[BBoxY1]), (b[BBoxX2], b[BBoxY2]), (0, 0, 255), 2)
-            cx = b[BBoxX1]
-            cy = b[BBoxY1] + 12
-            cv2.putText(img_output, text, (cx, cy), cv2.FONT_HERSHEY_DUPLEX, 0.5, (255, 255, 255))
+            # cv2.rectangle(img_output, (b[BBoxX1], b[BBoxY1]), (b[BBoxX2], b[BBoxY2]), (0, 0, 255), 2)
+            # cx = b[BBoxX1]
+            # cy = b[BBoxY1] + 12
+            # cv2.putText(img_output, text, (cx, cy), cv2.FONT_HERSHEY_DUPLEX, 0.5, (255, 255, 255))
 
-            # landms
-            cv2.circle(img_output, (b[LE_X], b[LE_Y]), 1, (0, 0, 255), 4)
-            cv2.circle(img_output, (b[RE_X], b[RE_Y]), 1, (0, 255, 255), 4)
-            cv2.circle(img_output, (b[ N_X], b[ N_Y]), 1, (255, 0, 255), 4)
-            cv2.circle(img_output, (b[LM_X], b[LM_Y]), 1, (0, 255, 0), 4)
-            cv2.circle(img_output, (b[RM_X], b[RM_Y]), 1, (255, 0, 0), 4)
+            # # landms
+            # cv2.circle(img_output, (b[LE_X], b[LE_Y]), 1, (0, 0, 255), 4)
+            # cv2.circle(img_output, (b[RE_X], b[RE_Y]), 1, (0, 255, 255), 4)
+            # cv2.circle(img_output, (b[ N_X], b[ N_Y]), 1, (255, 0, 255), 4)
+            # cv2.circle(img_output, (b[LM_X], b[LM_Y]), 1, (0, 255, 0), 4)
+            # cv2.circle(img_output, (b[RM_X], b[RM_Y]), 1, (255, 0, 0), 4)
 
-            # save image
-            cv2.imwrite(f"{cropped_img_path}{det_idx}.jpg", img_output)
+            # # save image
+            # cv2.imwrite(f"{cropped_img_path}{det_idx}.jpg", img_output)
 
-            facial5points = [[b[LE_X], b[LE_Y]],
-                            [b[RE_X], b[RE_Y]],
-                            [b[ N_X], b[ N_Y]],
-                            [b[LM_X], b[LM_Y]],
-                            [b[RM_X], b[RM_Y]]
-                            ]
-            reference_5pts = get_reference_facial_points(output_size, inner_padding_factor, outer_padding, default_square)
-            align_crop_img = warp_and_crop_face(img_raw, facial5points, reference_pts=reference_5pts, crop_size=output_size)
-            cv2.imwrite(f"{cropped_img_path}{det_idx}-cropped.jpg", align_crop_img)
+            # facial5points = [[b[LE_X], b[LE_Y]],
+            #                 [b[RE_X], b[RE_Y]],
+            #                 [b[ N_X], b[ N_Y]],
+            #                 [b[LM_X], b[LM_Y]],
+            #                 [b[RM_X], b[RM_Y]]
+            #                 ]
+            # reference_5pts = get_reference_facial_points(output_size, inner_padding_factor, outer_padding, default_square)
+            # align_crop_img = warp_and_crop_face(img_raw, facial5points, reference_pts=reference_5pts, crop_size=output_size)
+            # cv2.imwrite(f"{cropped_img_path}{det_idx}-cropped.jpg", align_crop_img)
+            
             
             det_idx += 1
 
@@ -274,6 +277,7 @@ with torch.no_grad():
 
             founded = True if len(dets) > 0 else False
             new_train_csv.loc[len(new_train_csv)] = [train_csv.iloc[i]['id'],
+                                                     filepath,
                                                      file_name + '.npy',
                                                      org_class,
                                                      mask,
@@ -283,6 +287,5 @@ with torch.no_grad():
                                                      founded,
                                                      b[BBoxX1], b[BBoxY1], b[BBoxX2], b[BBoxY2],
                                                      b[SCORE],
-                                                     b[LE_X], b[LE_Y], b[RE_X], b[RE_Y], b[N_X], b[N_Y], b[LM_X], b[LM_Y], b[RM_X], b[RM_Y] 
                                                     ]
     new_train_csv.to_csv(new_train_csv_path)

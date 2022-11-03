@@ -28,7 +28,8 @@ from utils.box_utils import decode, decode_landm
 eval_dir_path = '../input/data/eval/'
 eval_csv_path = eval_dir_path + 'info.csv' 
 
-cropped_img_path = '../input/data/eval_crop/'
+cropped_img_path = '../input/data/new_images/'
+
 try: 
     os.mkdir(cropped_img_path, mode = 0o755)
 except OSError as error:
@@ -49,18 +50,18 @@ BBoxY1 = 1 ## Top
 BBoxX2 = 2 ## Right
 BBoxY2 = 3 ## Bottom
 # Score
-SCORE = 4
+# SCORE = 4
 # Landmark
-LE_X = 5
-LE_Y = 6
-RE_X = 7
-RE_Y = 8
-N_X = 9
-N_Y = 10
-LM_X = 11
-LM_Y = 12
-RM_X = 13
-RM_Y = 14
+# LE_X = 5
+# LE_Y = 6
+# RE_X = 7
+# RE_Y = 8
+# N_X = 9
+# N_Y = 10
+# LM_X = 11
+# LM_Y = 12
+# RM_X = 13
+# RM_Y = 14
 
 
 def get_files(path):
@@ -129,7 +130,7 @@ transform = T.Compose([
         ])
 
 
-model = torch.load('../checkpoint/resnet50_detection/checkpoint_ep_25.pth')
+model = torch.load('../checkpoint/resnet50_crop_detection/checkpoint_best.pth')
 model.eval()
 model = model.to(device)
 
@@ -156,6 +157,7 @@ with torch.no_grad():
     for i in tqdm(range(len(eval_csv))):
         ## Load and detection
         filepath = eval_dir_path + f"images/{eval_csv.iloc[i]['ImageID']}"
+        new_filepath = cropped_img_path + f"images/{eval_csv.iloc[i]['ImageID']}"
         file_name, file_extension = os.path.splitext(filepath)
         if os.path.isfile(file_name + '.npy') == False:
             img = cv2.cvtColor(cv2.imread(filepath, cv2.IMREAD_COLOR), cv2.COLOR_BGR2RGB)
@@ -225,7 +227,7 @@ with torch.no_grad():
 
         # show image
         #text = "{:.4f}".format(b[SCORE])
-        #img_output = img_raw.copy()
+        img_output = img_raw_bgr.copy()
         #cv2.rectangle(img_output, (b[BBoxX1], b[BBoxY1]), (b[BBoxX2], b[BBoxY2]), (0, 0, 255), 2)
         #cx = b[BBoxX1]
         #cy = b[BBoxY1] + 12
@@ -252,16 +254,38 @@ with torch.no_grad():
         #cropped_img = cv2.resize(cropped_img, (256, 256), interpolation=cv2.INTER_CUBIC)
 
         
-        facial5points = [[b[LE_X], b[LE_Y]],
-                         [b[RE_X], b[RE_Y]],
-                         [b[ N_X], b[ N_Y]],
-                         [b[LM_X], b[LM_Y]],
-                         [b[RM_X], b[RM_Y]]
-                        ]
-        reference_5pts = get_reference_facial_points(output_size, inner_padding_factor, outer_padding, default_square)
-        align_crop_img = warp_and_crop_face(img_raw_bgr, facial5points, reference_pts=reference_5pts, crop_size=output_size)
+#         facial5points = [[b[LE_X], b[LE_Y]],
+#                          [b[RE_X], b[RE_Y]],
+#                          [b[ N_X], b[ N_Y]],
+#                          [b[LM_X], b[LM_Y]],
+#                          [b[RM_X], b[RM_Y]]
+#                         ]
+#         reference_5pts = get_reference_facial_points(output_size, inner_padding_factor, outer_padding, default_square)
+#         align_crop_img = warp_and_crop_face(img_raw_bgr, facial5points, reference_pts=reference_5pts, crop_size=output_size)
 
-        cv2.imwrite(f"{cropped_img_path}{det_idx}-cropped.jpg", align_crop_img)
+#         cv2.imwrite(f"{cropped_img_path}{det_idx}-cropped.jpg", align_crop_img)
+
+
+        x1 = b[BBoxX1]
+        x2 = b[BBoxX2]
+        y1 = b[BBoxY1]
+        y2 = b[BBoxY2]
+        w = x2 - x1
+        h = y2 - y1
+        w = w // 3
+        h = h // 3
+
+        nx1 = max(0, x1-w)
+        nx2 = min(384, x2+w)
+        ny1 = max(0, y1-h)
+        ny2 = min(512, y2+h)
+        X = img_output[ny1:ny2, nx1:nx2]
+        # X = cv2.cvtColor(X, cv2.COLOR_RGB2BGR)
+        align_crop_img = cv2.resize(X, (350, 350))
+        
+    
+        cv2.imwrite(f"{new_new_filepath}.jpg", align_crop_img)
+    
         det_idx += 1
 
         ## Classification
@@ -273,5 +297,5 @@ with torch.no_grad():
         all_predictions.extend(pred.cpu().numpy())
 
 eval_csv['ans'] = all_predictions
-eval_csv.to_csv(os.path.join(eval_dir_path, 'submission_detect.csv'), index=False)
+eval_csv.to_csv(os.path.join(eval_dir_path, 'submission_detect_crop.csv'), index=False)
 print('test inference is done!')
