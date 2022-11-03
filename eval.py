@@ -157,7 +157,8 @@ with torch.no_grad():
     for i in tqdm(range(len(eval_csv))):
         ## Load and detection
         filepath = eval_dir_path + f"images/{eval_csv.iloc[i]['ImageID']}"
-        new_filepath = cropped_img_path + f"images/{eval_csv.iloc[i]['ImageID']}"
+        new_filepath = cropped_img_path + f"{eval_csv.iloc[i]['ImageID']}"
+        
         file_name, file_extension = os.path.splitext(filepath)
         if os.path.isfile(file_name + '.npy') == False:
             img = cv2.cvtColor(cv2.imread(filepath, cv2.IMREAD_COLOR), cv2.COLOR_BGR2RGB)
@@ -284,7 +285,7 @@ with torch.no_grad():
         align_crop_img = cv2.resize(X, (350, 350))
         
     
-        cv2.imwrite(f"{new_new_filepath}.jpg", align_crop_img)
+        cv2.imwrite(f"{new_filepath}", align_crop_img)
     
         det_idx += 1
 
