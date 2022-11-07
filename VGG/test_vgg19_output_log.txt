@@ -1,0 +1,173 @@
+[INFO] Training Epoch : 0
+STEP[0/237] Training loss: 0.046 / Training accuracy: 0.047
+STEP[10/237] Training loss: 0.029 / Training accuracy: 0.312
+STEP[20/237] Training loss: 0.020 / Training accuracy: 0.609
+STEP[30/237] Training loss: 0.018 / Training accuracy: 0.641
+STEP[40/237] Training loss: 0.011 / Training accuracy: 0.781
+STEP[50/237] Training loss: 0.011 / Training accuracy: 0.781
+STEP[60/237] Training loss: 0.012 / Training accuracy: 0.781
+STEP[70/237] Training loss: 0.011 / Training accuracy: 0.797
+STEP[80/237] Training loss: 0.010 / Training accuracy: 0.766
+STEP[90/237] Training loss: 0.007 / Training accuracy: 0.859
+STEP[100/237] Training loss: 0.008 / Training accuracy: 0.828
+STEP[110/237] Training loss: 0.008 / Training accuracy: 0.812
+STEP[120/237] Training loss: 0.008 / Training accuracy: 0.875
+STEP[130/237] Training loss: 0.007 / Training accuracy: 0.891
+STEP[140/237] Training loss: 0.008 / Training accuracy: 0.812
+STEP[150/237] Training loss: 0.007 / Training accuracy: 0.875
+STEP[160/237] Training loss: 0.008 / Training accuracy: 0.844
+STEP[170/237] Training loss: 0.006 / Training accuracy: 0.922
+STEP[180/237] Training loss: 0.009 / Training accuracy: 0.812
+STEP[190/237] Training loss: 0.004 / Training accuracy: 0.906
+STEP[200/237] Training loss: 0.006 / Training accuracy: 0.891
+STEP[210/237] Training loss: 0.006 / Training accuracy: 0.844
+STEP[220/237] Training loss: 0.005 / Training accuracy: 0.938
+STEP[230/237] Training loss: 0.005 / Training accuracy: 0.844
+[Val] Current acc : 56.117 / Current loss : 0.312
+[Val] Best acc : 56.117 / Best loss : 0.312
+EPOCH[0/10] Training loss: 0.003 / Training accuracy: 0.234
+[INFO] Training Epoch : 1
+STEP[0/237] Training loss: 0.003 / Training accuracy: 0.938
+STEP[10/237] Training loss: 0.005 / Training accuracy: 0.906
+STEP[20/237] Training loss: 0.007 / Training accuracy: 0.859
+STEP[30/237] Training loss: 0.004 / Training accuracy: 0.938
+STEP[40/237] Training loss: 0.005 / Training accuracy: 0.906
+STEP[50/237] Training loss: 0.002 / Training accuracy: 0.984
+STEP[60/237] Training loss: 0.004 / Training accuracy: 0.906
+STEP[70/237] Training loss: 0.003 / Training accuracy: 0.938
+STEP[80/237] Training loss: 0.005 / Training accuracy: 0.859
+STEP[90/237] Training loss: 0.005 / Training accuracy: 0.859
+STEP[100/237] Training loss: 0.003 / Training accuracy: 0.922
+STEP[110/237] Training loss: 0.003 / Training accuracy: 0.969
+STEP[120/237] Training loss: 0.004 / Training accuracy: 0.938
+STEP[130/237] Training loss: 0.002 / Training accuracy: 0.938
+STEP[140/237] Training loss: 0.002 / Training accuracy: 0.938
+STEP[150/237] Training loss: 0.003 / Training accuracy: 0.922
+STEP[160/237] Training loss: 0.003 / Training accuracy: 0.938
+STEP[170/237] Training loss: 0.002 / Training accuracy: 0.953
+STEP[180/237] Training loss: 0.002 / Training accuracy: 0.938
+STEP[190/237] Training loss: 0.004 / Training accuracy: 0.922
+STEP[200/237] Training loss: 0.003 / Training accuracy: 0.922
+STEP[210/237] Training loss: 0.004 / Training accuracy: 0.891
+STEP[220/237] Training loss: 0.003 / Training accuracy: 0.938
+STEP[230/237] Training loss: 0.002 / Training accuracy: 0.953
+[Val] Current acc : 59.883 / Current loss : 0.157
+[Val] Best acc : 59.883 / Best loss : 0.157
+EPOCH[1/10] Training loss: 0.003 / Training accuracy: 0.219
+[INFO] Training Epoch : 2
+STEP[0/237] Training loss: 0.001 / Training accuracy: 0.969
+STEP[10/237] Training loss: 0.002 / Training accuracy: 0.922
+STEP[20/237] Training loss: 0.000 / Training accuracy: 1.000
+STEP[30/237] Training loss: 0.003 / Training accuracy: 0.953
+STEP[40/237] Training loss: 0.001 / Training accuracy: 0.969
+STEP[50/237] Training loss: 0.001 / Training accuracy: 0.969
+STEP[60/237] Training loss: 0.002 / Training accuracy: 0.953
+STEP[70/237] Training loss: 0.001 / Training accuracy: 0.984
+STEP[80/237] Training loss: 0.000 / Training accuracy: 1.000
+STEP[90/237] Training loss: 0.002 / Training accuracy: 0.953
+STEP[100/237] Training loss: 0.002 / Training accuracy: 0.969
+STEP[110/237] Training loss: 0.001 / Training accuracy: 0.984
+STEP[120/237] Training loss: 0.002 / Training accuracy: 0.953
+STEP[130/237] Training loss: 0.004 / Training accuracy: 0.922
+STEP[140/237] Training loss: 0.003 / Training accuracy: 0.953
+STEP[150/237] Training loss: 0.002 / Training accuracy: 0.938
+STEP[160/237] Training loss: 0.001 / Training accuracy: 0.984
+STEP[170/237] Training loss: 0.001 / Training accuracy: 0.984
+STEP[180/237] Training loss: 0.000 / Training accuracy: 1.000
+STEP[190/237] Training loss: 0.002 / Training accuracy: 0.953
+STEP[200/237] Training loss: 0.000 / Training accuracy: 1.000
+STEP[210/237] Training loss: 0.001 / Training accuracy: 0.969
+STEP[220/237] Training loss: 0.002 / Training accuracy: 0.984
+STEP[230/237] Training loss: 0.001 / Training accuracy: 0.969
+[Val] Current acc : 60.983 / Current loss : 0.118
+[Val] Best acc : 60.983 / Best loss : 0.118
+EPOCH[2/10] Training loss: 0.000 / Training accuracy: 0.250
+[INFO] Training Epoch : 3
+STEP[0/237] Training loss: 0.001 / Training accuracy: 0.969
+STEP[10/237] Training loss: 0.003 / Training accuracy: 0.938
+STEP[20/237] Training loss: 0.001 / Training accuracy: 0.984
+STEP[30/237] Training loss: 0.001 / Training accuracy: 0.969
+STEP[40/237] Training loss: 0.001 / Training accuracy: 0.953
+STEP[50/237] Training loss: 0.002 / Training accuracy: 0.969
+STEP[60/237] Training loss: 0.000 / Training accuracy: 1.000
+STEP[70/237] Training loss: 0.001 / Training accuracy: 0.984
+STEP[80/237] Training loss: 0.000 / Training accuracy: 1.000
+STEP[90/237] Training loss: 0.002 / Training accuracy: 0.953
+STEP[100/237] Training loss: 0.000 / Training accuracy: 1.000
+STEP[110/237] Training loss: 0.003 / Training accuracy: 0.938
+STEP[120/237] Training loss: 0.003 / Training accuracy: 0.922
+STEP[130/237] Training loss: 0.001 / Training accuracy: 0.984
+STEP[140/237] Training loss: 0.000 / Training accuracy: 1.000
+STEP[150/237] Training loss: 0.002 / Training accuracy: 0.969
+STEP[160/237] Training loss: 0.002 / Training accuracy: 0.938
+STEP[170/237] Training loss: 0.003 / Training accuracy: 0.953
+STEP[180/237] Training loss: 0.002 / Training accuracy: 0.969
+STEP[190/237] Training loss: 0.001 / Training accuracy: 1.000
+STEP[200/237] Training loss: 0.001 / Training accuracy: 0.938
+STEP[210/237] Training loss: 0.001 / Training accuracy: 0.984
+STEP[220/237] Training loss: 0.000 / Training accuracy: 1.000
+STEP[230/237] Training loss: 0.000 / Training accuracy: 1.000
+[Val] Current acc : 61.517 / Current loss : 0.078
+[Val] Best acc : 61.517 / Best loss : 0.078
+EPOCH[3/10] Training loss: 0.000 / Training accuracy: 0.250
+[INFO] Training Epoch : 4
+STEP[0/237] Training loss: 0.001 / Training accuracy: 0.984
+STEP[10/237] Training loss: 0.002 / Training accuracy: 0.984
+STEP[20/237] Training loss: 0.000 / Training accuracy: 1.000
+STEP[30/237] Training loss: 0.000 / Training accuracy: 1.000
+STEP[40/237] Training loss: 0.000 / Training accuracy: 1.000
+STEP[50/237] Training loss: 0.000 / Training accuracy: 0.984
+STEP[60/237] Training loss: 0.000 / Training accuracy: 1.000
+STEP[70/237] Training loss: 0.002 / Training accuracy: 0.984
+STEP[80/237] Training loss: 0.001 / Training accuracy: 0.969
+STEP[90/237] Training loss: 0.001 / Training accuracy: 0.984
+STEP[100/237] Training loss: 0.000 / Training accuracy: 1.000
+STEP[110/237] Training loss: 0.001 / Training accuracy: 0.984
+STEP[120/237] Training loss: 0.000 / Training accuracy: 1.000
+STEP[130/237] Training loss: 0.001 / Training accuracy: 0.984
+STEP[140/237] Training loss: 0.000 / Training accuracy: 1.000
+STEP[150/237] Training loss: 0.001 / Training accuracy: 0.984
+STEP[160/237] Training loss: 0.000 / Training accuracy: 1.000
+STEP[170/237] Training loss: 0.001 / Training accuracy: 0.984
+STEP[180/237] Training loss: 0.001 / Training accuracy: 0.969
+STEP[190/237] Training loss: 0.000 / Training accuracy: 1.000
+STEP[200/237] Training loss: 0.001 / Training accuracy: 0.984
+STEP[210/237] Training loss: 0.000 / Training accuracy: 1.000
+STEP[220/237] Training loss: 0.001 / Training accuracy: 0.984
+STEP[230/237] Training loss: 0.003 / Training accuracy: 0.953
+[Val] Current acc : 61.517 / Current loss : 0.076
+[Val] Best acc : 61.517 / Best loss : 0.076
+EPOCH[4/10] Training loss: 0.000 / Training accuracy: 0.250
+[INFO] Training Epoch : 5
+STEP[0/237] Training loss: 0.001 / Training accuracy: 0.984
+STEP[10/237] Training loss: 0.000 / Training accuracy: 0.984
+STEP[20/237] Training loss: 0.001 / Training accuracy: 0.984
+STEP[30/237] Training loss: 0.000 / Training accuracy: 1.000
+STEP[40/237] Training loss: 0.000 / Training accuracy: 1.000
+STEP[50/237] Training loss: 0.000 / Training accuracy: 1.000
+STEP[60/237] Training loss: 0.002 / Training accuracy: 0.969
+STEP[70/237] Training loss: 0.002 / Training accuracy: 0.984
+STEP[80/237] Training loss: 0.000 / Training accuracy: 0.984
+STEP[90/237] Training loss: 0.001 / Training accuracy: 0.984
+STEP[100/237] Training loss: 0.000 / Training accuracy: 1.000
+STEP[110/237] Training loss: 0.000 / Training accuracy: 1.000
+STEP[120/237] Training loss: 0.000 / Training accuracy: 1.000
+STEP[130/237] Training loss: 0.002 / Training accuracy: 0.984
+STEP[140/237] Training loss: 0.000 / Training accuracy: 0.984
+STEP[150/237] Training loss: 0.002 / Training accuracy: 0.984
+STEP[160/237] Training loss: 0.001 / Training accuracy: 0.969
+STEP[170/237] Training loss: 0.000 / Training accuracy: 1.000
+STEP[180/237] Training loss: 0.000 / Training accuracy: 1.000
+STEP[190/237] Training loss: 0.002 / Training accuracy: 0.953
+STEP[200/237] Training loss: 0.000 / Training accuracy: 1.000
+STEP[210/237] Training loss: 0.000 / Training accuracy: 0.984
+STEP[220/237] Training loss: 0.000 / Training accuracy: 1.000
+STEP[230/237] Training loss: 0.000 / Training accuracy: 1.000
+[Val] Current acc : 61.750 / Current loss : 0.059
+[Val] Best acc : 61.750 / Best loss : 0.059
+EPOCH[5/10] Training loss: 0.000 / Training accuracy: 0.250
+[INFO] Training Epoch : 6
+STEP[0/237] Training loss: 0.001 / Training accuracy: 0.984
+STEP[10/237] Training loss: 0.000 / Training accuracy: 1.000
+STEP[20/237] Training loss: 0.000 / Training accuracy: 1.000
+STEP[30/237] Training loss: 0.002 / Training accuracy: 0.969
