@@ -28,7 +28,7 @@ from utils.box_utils import decode, decode_landm
 eval_dir_path = '../input/data/eval/'
 eval_csv_path = eval_dir_path + 'info.csv' 
 
-cropped_img_path = '../input/data/new_images/'
+cropped_img_path = '../input/data/new_images2/'
 
 try: 
     os.mkdir(cropped_img_path, mode = 0o755)
