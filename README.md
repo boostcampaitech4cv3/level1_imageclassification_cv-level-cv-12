@@ -3,13 +3,13 @@
 <img width="1085" alt="스크린샷 2022-11-11 오후 1 13 32" src="https://user-images.githubusercontent.com/69153087/201261752-33f6bb6d-ddd0-46fa-a32b-f510c50e5a89.png">
 
 
-## 일석CV조
+## Member
 
-**김종해** [T4047] [@Jejugamguel](https://github.com/Jejugamguel) <br/>
-**유영준** [T4136] [@youngjun04](https://github.com/youngjun04) <br/>
-**이태희** [T4172] [@thlee00](https://github.com/thlee00) <br/>
-**조재효** [T4214] [@chojaehyo](https://github.com/chojaehyo) <br/>
-**한상준** [T4226] [@jphan32](https://github.com/jphan32) <br/>
+- 김종해 [T4047] : DataLoader 구현, Regression과 Classification을 결합한 ResNet 구현, MultiClass 기법 적용
+- 유영준 [T4136] : base 코드, swinT, RegNet 등의 모델 비교, Focal loss 등 성능 개선을 위한 기법 적용, Ensemble
+- 이태희 [T4172] : Model selection (VGG-19, efficientnet_b0 + pre-trained weight freeze, additional linear layer), Class imbalance problem (weighted random sampler, Stratified K-fold)
+- 조재효 [T4214] : EDA, Resnet, ResNeXt, EfficientNet(v2_small) 등 모델 학습, early stopping, checkpoint 구현 <br/>
+- 한상준 [T4226] : 프로젝트 도큐멘테이션, Image EDA, Face Detection 결합, 결과 분석 
 
 <br>
 
