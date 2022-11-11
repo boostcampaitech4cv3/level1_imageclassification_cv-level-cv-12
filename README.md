@@ -63,6 +63,6 @@ COVID-19의 확산으로 우리나라는 물론 전 세계 사람들은 경제�
 
 ## Approach
 
-<img width="700" height="500" alt="screen_shot_2022-11-04_at_11 09 00_am" src="https://user-images.githubusercontent.com/69153087/201267655-98896c0f-12bd-47a4-b6a8-82bc1a15e4e8.png">
+<img width="900" alt="스크린샷 2022-11-11 오후 2 34 25" src="https://user-images.githubusercontent.com/69153087/201270752-84aa6c7b-52f2-4066-85fc-ea3e1f5c3c6e.png">
 
 ## 
